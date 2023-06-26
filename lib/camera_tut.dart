@@ -2,7 +2,8 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class MyCameraScreen extends StatefulWidget {
-  const MyCameraScreen({Key? key}) : super(key: key);
+  List<CameraDescription> cameras;
+  MyCameraScreen({ required this.cameras ,Key? key}) : super(key: key);
 
   @override
   State<MyCameraScreen> createState() => _MyCameraScreenState();
@@ -11,35 +12,38 @@ class MyCameraScreen extends StatefulWidget {
 class _MyCameraScreenState extends State<MyCameraScreen> {
   late List<CameraDescription> cameras;
   late CameraController cameraController;
-
+  late Future<void> cameraValue;
 
   @override
   void initState() {
     // TODO: implement initState
     startCamera();
     super.initState();
+   // cameraValue = cameraController.initialize();
+    //startCamera();
   }
 
-  void startCamera() async{
-    cameras = await availableCameras();
+  Future<void> startCamera() async{
+   // cameras = await availableCameras();
 
     cameraController = CameraController(
-        cameras[0],
+        widget.cameras[0],
         ResolutionPreset.high,
       enableAudio: false,
     );
-
-    await cameraController.initialize().then((value) {
-      if(!mounted)
-        {
-          return;
-        }
-      setState(() {
-        
-      });
-    }).catchError((e){
-
-    });
+    cameraValue = cameraController.initialize();
+    // cameraValue = cameraController.initialize().then((value) {
+    //   debugPrint('waiting Canmera controller ');
+    //   if(!mounted)
+    //     {
+    //       return;
+    //     }
+    //   setState(() {
+    //
+    //   });
+    // }).catchError((e){
+    //   debugPrint('I am currently waiting');
+    // });
 
 
   }
@@ -53,42 +57,69 @@ class _MyCameraScreenState extends State<MyCameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(cameraController.value.isInitialized)
-      {
-        return Scaffold(
-          body: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                      child: Center(child: CameraPreview(cameraController)
-                      )
-                  ),
-                  Opacity(
-                    opacity: 0.5,
-                    child: Positioned(
-                      // top: 20,
-                      // right: 20,
-                      child: Container(
-                          height: MediaQuery.of(context).size.height ,
-                          width: MediaQuery.of(context).size.width,
-                          child: Image(
-                              image: NetworkImage('https://freepngimg.com/thumb/categories/353.png')
-                          )
-                      ),
-                 ),
-                  ),
-                ],
-              ),
 
-            ],
-          ),
+  //if(cameraController.value.isInitialized)
+    //{
+      return Scaffold(
+        body: Column(
+          children: [
+            Stack(
+              children: [
+                FutureBuilder(
+                    future: cameraValue,
+                    builder: (context,snapshot)
+                    {
+                      if(snapshot.connectionState == ConnectionState.done ) {
+                          return Container(
+                              child: Center(child: CameraPreview(cameraController)
+                              )
+                          );
+                        }
+                      else if(snapshot.connectionState == ConnectionState.waiting) {
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Center(child: CircularProgressIndicator()),
+                            ],
+                          );
+                        }
+                      else
+                        {
+                          return CircularProgressIndicator();
+                        }
 
-        );
-      }
-    else
-      {
-        return const SizedBox();
-      }
+                    }
+                ),
+                // Container(
+                //     child: Center(child: CameraPreview(cameraController)
+                //     )
+                // ),
+                Opacity(
+                  opacity: 0.5,
+                  child: Positioned(
+                    // top: 20,
+                    // right: 20,
+                    child: Container(
+                        height: MediaQuery.of(context).size.height ,
+                        width: MediaQuery.of(context).size.width,
+                        child: Image(
+                            image: NetworkImage('https://freepngimg.com/thumb/categories/353.png')
+                        )
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+   // }
+  // else
+  //   {
+  //     return Scaffold();
+  //   }
+
+     }
   }
-}
+

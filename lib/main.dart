@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 
 
 
-void main() {
+Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  final cameras =await availableCameras();
   // final cameras =await availableCameras();
-  runApp(const MyApp());
+  runApp(MyApp(cameras: cameras ,));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final List<CameraDescription> cameras;
+  MyApp({ required this.cameras, super.key });
 
 
   // This widget is the root of your application.
@@ -38,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MyCameraScreen(),
+      home: MyCameraScreen(cameras: cameras,),
     );
   }
 }
