@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class MyCameraScreen extends StatefulWidget {
   List<CameraDescription> cameras;
-  final String url;
-  MyCameraScreen({ required this.cameras , required this.url ,Key? key}) : super(key: key);
+  //final String url;
+  Image image;
+  MyCameraScreen({ required this.cameras ,required this.image ,Key? key}) : super(key: key);
 
   @override
   State<MyCameraScreen> createState() => _MyCameraScreenState();
@@ -105,7 +106,7 @@ class _MyCameraScreenState extends State<MyCameraScreen> {
                     child: Container(
                         height: MediaQuery.of(context).size.height*0.9,
                         width: MediaQuery.of(context).size.width*0.9,
-                        child: Image(image: NetworkImage(widget.url)),
+                        child: widget.image,
                         // child: Image(
                         //
                         //     // image: NetworkImage('https://freepngimg.com/thumb/categories/353.png')

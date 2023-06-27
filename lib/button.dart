@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SketchButton extends StatelessWidget {
-  SketchButton({Key? key, required this.onTap}) : super(key: key);
+  SketchButton({Key? key, required this.onTap ,  required this.title}) : super(key: key);
   VoidCallback onTap;
+  String title;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class SketchButton extends StatelessWidget {
           border: Border.all(),
         ),
         child: Center(child: Text(
-            'Proceed to Sketch',
+            title.toString(),
           style: TextStyle(fontWeight: FontWeight.bold , color: Colors.green),
         ),),
       ),

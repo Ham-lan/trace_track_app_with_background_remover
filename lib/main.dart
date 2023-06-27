@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:camera_app/camera_tut.dart';
+import 'package:camera_app/get_gallery_image.dart';
 import 'package:camera_app/get_image.dart';
+import 'package:camera_app/navigate_page_one.dart';
 import 'package:flutter/material.dart';
 
 
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: GetImage(cameras: cameras) ,
+      home: NavigateAhead(cameras: cameras) ,
     );
   }
 }
